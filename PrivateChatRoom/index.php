@@ -1,11 +1,14 @@
 <?php 
-  session_start();
+  session_start(); // Start the session to manage user login state
+
+  // Check if the user is already logged in
   if(isset($_SESSION['unique_id'])){
+    // Redirect to users page if user is logged in
     header("location: users.php");
   }
 ?>
 
-<?php include_once "header.php"; ?>
+<?php include_once "header.php"; ?> <!-- Include the header file ?> !-->
 <body>
   <div class="wrapper">
     <section class="form signup">
@@ -48,3 +51,8 @@
 
 </body>
 </html>
+
+<!--This PHP code is for the signup page of my chat application. It checks if a user is already logged in 
+by verifying the session. If the user is logged in, they are redirected to the users' page. If not, the signup page is displayed. 
+The form collects the users first name, last name, email, password, and a profile image, and includes JavaScript 
+for additional functionalities like showing/hiding the password and handling the signup process.
