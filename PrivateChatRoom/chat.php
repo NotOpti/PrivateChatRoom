@@ -1,7 +1,10 @@
 <?php 
   session_start();
-  include_once "php/config.php";
+  include_once "php/config.php"; // Include the configuration file to connect to the database
+
+  // Check if the user is not logged in by verifying the unique_id session variable
   if(!isset($_SESSION['unique_id'])){
+    // If not logged in, redirect to the login page
     header("location: login.php");
   }
 ?>
@@ -37,7 +40,10 @@
     </section>
   </div>
 
-  <script src="javascript/chat.js"></script>
+  <script src="javascript/chat.js"></script> <!-- JavaScript file for handling chat functionality !-->
 
 </body>
 </html>
+
+<!-- This PHP code handles the chat interface in my app. It ensures that the user is logged in, 
+retrieves user information from the database, and sets up the chat area interface for messaging. !-->
