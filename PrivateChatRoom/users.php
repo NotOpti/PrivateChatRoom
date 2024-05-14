@@ -1,11 +1,13 @@
 <?php 
-  session_start();
-  include_once "php/config.php";
+  session_start(); // Start the session to access session variables
+  include_once "php/config.php"; // Include the database configuration file
+
+  // Check if the user is not logged in by verifying the session variable
   if(!isset($_SESSION['unique_id'])){
-    header("location: login.php");
+    header("location: login.php"); // Redirect to the login page if the user is not logged in
   }
 ?>
-<?php include_once "header.php"; ?>
+<?php include_once "header.php"; ?> <!-- Include the header file !-->
 <body>
   <div class="wrapper">
     <section class="users">
@@ -40,3 +42,4 @@
 
 </body>
 </html>
+
