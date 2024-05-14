@@ -1,5 +1,11 @@
+<!-- unzippers.php is a utility script in my app that provides a web-based interface for extracting and creating archive files. It doesn'ty contribute to the core chatting functionality, its role is:
+
+- Allowing efficient upload and management of bulk files or assets needed for the chat application.
+- Facilitating backups and restoration of application data, ensuring data integrity and easy recovery.
+
 <?php
 /**
+ * Enchances file management capabilities, making it easier for users to handle archives without requiring technical expertise or command-line access.
  * The Unzipper extracts .zip or .rar archives and .gz files on webservers.
  * It's handy if you do not have shell access. E.g. if you want to upload a lot
  * of files (php framework or image collection) as an archive to save time.
@@ -10,28 +16,29 @@
  * @package attec.toolbox
  * @version 0.1.1
  */
-define('VERSION', '0.1.1');
+define('VERSION', '0.1.1');  // Define the version of the Unzipper tool
 
-$timestart = microtime(TRUE);
-$GLOBALS['status'] = array();
+$timestart = microtime(TRUE);  // Start the timer for processing time
+$GLOBALS['status'] = array();  // Initialize the status array for feedback
 
-$unzipper = new Unzipper;
+
+$unzipper = new Unzipper;  // Create an instance of the Unzipper class
 if (isset($_POST['dounzip'])) {
   // Check if an archive was selected for unzipping.
   $archive = isset($_POST['zipfile']) ? strip_tags($_POST['zipfile']) : '';
   $destination = isset($_POST['extpath']) ? strip_tags($_POST['extpath']) : '';
-  $unzipper->prepareExtraction($archive, $destination);
+  $unzipper->prepareExtraction($archive, $destination);  // Prepare extraction process
 }
 
 if (isset($_POST['dozip'])) {
   $zippath = !empty($_POST['zippath']) ? strip_tags($_POST['zippath']) : '.';
   // Resulting zipfile e.g. zipper--2016-07-23--11-55.zip.
   $zipfile = 'zipper-' . date("Y-m-d--H-i") . '.zip';
-  Zipper::zipDir($zippath, $zipfile);
+  Zipper::zipDir($zippath, $zipfile); // Create the zip archive
 }
 
-$timeend = microtime(TRUE);
-$time = round($timeend - $timestart, 4);
+$timeend = microtime(TRUE); // End the timer
+$time = round($timeend - $timestart, 4); // Calculate the processing time
 
 /**
  * Class Unzipper
@@ -48,7 +55,7 @@ class Unzipper {
           || pathinfo($file, PATHINFO_EXTENSION) === 'gz'
           || pathinfo($file, PATHINFO_EXTENSION) === 'rar'
         ) {
-          $this->zipfiles[] = $file;
+          $this->zipfiles[] = $file;  // Add valid files to the zipfiles array
         }
       }
       closedir($dh);
