@@ -1,16 +1,23 @@
 <?php
-    session_start();
-    include_once "config.php";
+    session_start(); // Start session to access session variables
+    include_once "config.php"; // Include database configuration
+
+    // Get form data and prevent SQL injection
     $fname = mysqli_real_escape_string($conn, $_POST['fname']);
     $lname = mysqli_real_escape_string($conn, $_POST['lname']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $password = mysqli_real_escape_string($conn, $_POST['password']);
+
+    // Check if form fields are not empty
     if(!empty($fname) && !empty($lname) && !empty($email) && !empty($password)){
+        // Validate email format
         if(filter_var($email, FILTER_VALIDATE_EMAIL)){
+            // Check if email already exists in the database
             $sql = mysqli_query($conn, "SELECT * FROM users WHERE email = '{$email}'");
             if(mysqli_num_rows($sql) > 0){
                 echo "$email - This email already exist!";
             }else{
+                // Handle image upload
                 if(isset($_FILES['image'])){
                     $img_name = $_FILES['image']['name'];
                     $img_type = $_FILES['image']['type'];
@@ -25,13 +32,17 @@
                         if(in_array($img_type, $types) === true){
                             $time = time();
                             $new_img_name = $time.$img_name;
+                            // Move uploaded image to directory
                             if(move_uploaded_file($tmp_name,"images/".$new_img_name)){
                                 $ran_id = rand(time(), 100000000);
                                 $status = "Active now";
                                 $encrypt_pass = md5($password);
+
+                                // Insert user data into the database
                                 $insert_query = mysqli_query($conn, "INSERT INTO users (unique_id, fname, lname, email, password, img, status)
                                 VALUES ({$ran_id}, '{$fname}','{$lname}', '{$email}', '{$encrypt_pass}', '{$new_img_name}', '{$status}')");
                                 if($insert_query){
+                                    // Retrieve user data after insertion
                                     $select_sql2 = mysqli_query($conn, "SELECT * FROM users WHERE email = '{$email}'");
                                     if(mysqli_num_rows($select_sql2) > 0){
                                         $result = mysqli_fetch_assoc($select_sql2);
@@ -58,4 +69,5 @@
     }else{
         echo "All input fields are required!";
     }
+    // This script handles user registration, including form validation, image upload, and database insertion.
 ?>
